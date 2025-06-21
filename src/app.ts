@@ -15,7 +15,7 @@ app.use(json());
 
 app.get("/health", (req: Request, res: Response) => res.status(httpStatus.OK).send(`I'm okay!`));
 
-app.use(bingoRouter);
+app.use("/bingo", bingoRouter);
 app.use(errorHandlerMiddleware);
 
 export default app;
