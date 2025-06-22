@@ -15,7 +15,7 @@ jobs:
         image: postgres:15
         env:
           POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: dbzinhas2
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
           POSTGRES_DB: bingo
         ports:
           - 5432:5432
@@ -26,7 +26,8 @@ jobs:
           --health-retries 5
 
     env:
-      DATABASE_URL: postgres://postgres:dbzinhas2@localhost:5432/bingo
+
+      DATABASE_URL: postgres://postgres:${{ secrets.POSTGRES_PASSWORD }}@localhost:5432/bingo
 
     steps:
       - uses: actions/checkout@v3
@@ -41,6 +42,9 @@ jobs:
 
       - name: Generate Prisma Client
         run: npx prisma generate
+
+      - name: Run Migrations
+        run: npx prisma migrate deploy
 
       - name: Run tests
         run: npm run test
