@@ -7,9 +7,8 @@ on:
     branches: [main]
 
 jobs:
-  test:
+  test: 
     runs-on: ubuntu-latest
-
     services:
       postgres:
         image: postgres:15
@@ -42,8 +41,12 @@ jobs:
       - name: Generate Prisma Client
         run: npx prisma generate
 
+      - name: Run Migrations on Test DB
+        run: npx prisma migrate deploy
+
       - name: Run tests
         run: npm run test
+
 
   deploy:
     name: Deploy to Render
