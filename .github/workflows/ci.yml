@@ -15,7 +15,7 @@ jobs:
         image: postgres:15
         env:
           POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_PASSWORD: dbzinhas2
           POSTGRES_DB: bingo
         ports:
           - 5432:5432
@@ -26,7 +26,7 @@ jobs:
           --health-retries 5
 
     env:
-      DATABASE_URL: postgres://postgres:${{ secrets.POSTGRES_PASSWORD }}@localhost:5432/bingo
+      DATABASE_URL: ${{ secrets.TEST_DATABASE_URL }}
 
     steps:
       - uses: actions/checkout@v3
@@ -49,30 +49,12 @@ jobs:
     name: Deploy to Render
     runs-on: ubuntu-latest
     needs: test
-    if: github.ref == 'refs/heads/main' && success()
-
-    env:
-      DATABASE_URL: ${{ secrets.DATABASE_URL }}
-
+    if: |
+      github.ref == 'refs/heads/main' && needs.test.result == 'success'
     steps:
-      - uses: actions/checkout@v3
-
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 20
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Generate Prisma Client
-        run: npx prisma generate
-
-      - name: Run Migrations
-        run: npx prisma migrate deploy
-
       - name: Trigger Render Deploy Hook
         run: curl "$RENDER_DEPLOY_HOOK"
         env:
           RENDER_DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
+
 
