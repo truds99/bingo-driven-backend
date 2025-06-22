@@ -1,4 +1,4 @@
-name: CI - Bingo Driven
+name: CI - Back-end
 
 on:
   push:
@@ -15,7 +15,7 @@ jobs:
         image: postgres:15
         env:
           POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
+          POSTGRES_PASSWORD: dbzinhas2
           POSTGRES_DB: bingo
         ports:
           - 5432:5432
@@ -26,12 +26,12 @@ jobs:
           --health-retries 5
 
     env:
-      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/bingo
+      DATABASE_URL: postgres://postgres:dbzinhas2@localhost:5432/bingo
 
     steps:
       - uses: actions/checkout@v3
 
-      - name: Use Node.js 20
+      - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: 20
@@ -42,8 +42,6 @@ jobs:
       - name: Generate Prisma Client
         run: npx prisma generate
 
-      - name: Run migrations
-        run: npx prisma migrate deploy
-
       - name: Run tests
-        run: npm test
+        run: npm run test
+
