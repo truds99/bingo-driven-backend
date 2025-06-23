@@ -27,13 +27,13 @@ Esse sistema facilita todo o processo: você cria novos jogos, sorteia números 
 1. Clone o repositório do back-end:
 
 ```bash
-git clone https://github.com/seu-usuario/bingo-driven-backend.git
+git clone https://github.com/truds99/bingo-driven-backend.git
 cd bingo-driven-backend
 ```
 
 2. Crie o arquivo `.env` na raiz e adicione:
 
-```
+```env
 DATABASE_URL=postgres://postgres:dbzinhas2@db:5432/bingo
 ```
 
@@ -44,6 +44,32 @@ docker-compose up --build
 ```
 
 A API estará rodando em: [http://localhost:5000](http://localhost:5000)
+
+---
+
+## 🧩 Como rodar o front-end com Docker
+
+1. Clone o repositório do front-end:
+
+```bash
+git clone https://github.com/truds99/bingo-driven-frontend.git
+cd bingo-driven-frontend
+```
+
+2. Crie o arquivo `.env` com a URL da API:
+
+```env
+VITE_BACKEND=http://localhost:5000
+```
+
+3. Rode o Docker:
+
+```bash
+docker build -t bingo-frontend .
+docker run -p 8080:80 bingo-frontend
+```
+
+O front estará em: [http://localhost:8080](http://localhost:8080)
 
 ---
 
@@ -70,22 +96,22 @@ docker exec -it bingo-api npx prisma migrate deploy
 
 ---
 
-## 🌐 Link de produção (Render)
+## 🌐 Links de Produção
 
-- API hospedada em: [https://bingo-driven-backend-1.onrender.com](https://bingo-driven-backend-1.onrender.com)
-- Rota de saúde (verifica se está online): [https://bingo-driven-backend-1.onrender.com/health](https://bingo-driven-backend-1.onrender.com/health)
+- API hospedada na Render: [https://bingo-driven-backend-1.onrender.com](https://bingo-driven-backend-1.onrender.com)
+- Front-end na Vercel: [https://bingo-driven-frontend-gamma.vercel.app](https://bingo-driven-frontend-gamma.vercel.app)
 
 ---
 
 ## 🛠️ Variáveis de ambiente (produção)
 
-A variável de ambiente `DATABASE_URL` já está configurada no painel da Render com o valor da **Internal Database URL** do PostgreSQL.
+A variável `DATABASE_URL` foi configurada no painel da Render com a Internal URL fornecida pelo banco PostgreSQL da própria plataforma.
 
 ---
 
 ## 🧪 Testes no CI
 
-Os testes são executados automaticamente a cada push no GitHub. Commits com testes falhando são barrados no deploy.
+Os testes automatizados rodam via GitHub Actions e são obrigatórios para que o deploy seja feito. Commits com testes falhando não vão para produção.
 
 ---
 
